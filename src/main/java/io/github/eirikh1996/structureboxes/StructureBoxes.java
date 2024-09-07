@@ -91,19 +91,17 @@ public class StructureBoxes extends JavaPlugin {
             Settings.FAWE = false;
         }
 
-        final Map data;
+        String schemDirName;
         try {
-            File weConfig = new File(getWorldEditPlugin().getDataFolder(),  (Settings.FAWE ? "worldedit-" : "") + "config" + ".yml");
-            Yaml yaml = new Yaml();
-            data = yaml.load(new FileInputStream(weConfig));
-        } catch (IOException e){
-            getLogger().severe(I18nSupport.getInternationalisedString("Startup - Error reading WE config"));
+            // Try loading from API
+            schemDirName = worldEditPlugin.getLocalConfiguration().saveDir;
+        } catch (Exception e) {
             e.printStackTrace();
+            getLogger().severe(I18nSupport.getInternationalisedString("Startup - Error reading WE config"));
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-
-        File schemDir = new File(worldEditPlugin.getDataFolder(), (String) ((Map) data.get("saving")).get("dir"));
+        File schemDir = new File(worldEditPlugin.getDataFolder(), schemDirName);
         worldEditHandler = new WorldEditHandler(schemDir, this);
 
         boolean foundRegionProvider = false;
@@ -135,7 +133,7 @@ public class StructureBoxes extends JavaPlugin {
             getLogger().info(I18nSupport.getInternationalisedString("Startup - Restrict to regions set to false"));
         }
 
-        getCommand("structurebox").setExecutor(new StructureBoxCommand());
+        getCommand("structurebox").setExecutor(new StructureBoxCommand(schemDirName));
 
         getServer().getPluginManager().registerEvents(new BlockListener(), this);
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
