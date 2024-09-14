@@ -23,7 +23,7 @@ dependencies {
 }
 
 group = "io.github.eirikh1996"
-version = "4.0.0_beta-2_dev-2"
+version = "4.0.0_beta-3"
 description = "StructureBoxes"
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
