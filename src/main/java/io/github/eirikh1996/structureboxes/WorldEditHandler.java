@@ -258,6 +258,7 @@ public class WorldEditHandler {
                 session.flushSession();
                 sbMain.clearInterior(interior);
                 structure.setPlacementTime(System.currentTimeMillis());
+                session.close();
             } catch (WorldEditException e) {
                 e.printStackTrace();
             }
